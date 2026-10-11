@@ -1,0 +1,354 @@
+/* ============================================
+   CCOLCAS - Panel Administrativo
+   CSS exclusivo del área admin (separado del catálogo)
+   ============================================ */
+
+* { box-sizing: border-box; }
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background: #f1f5f9;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Sidebar */
+.admin-sidebar {
+    width: 250px;
+    background: #0f172a;
+    color: #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.admin-sidebar__brand {
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: #fff;
+    border-bottom: 1px solid #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.admin-sidebar__nav {
+    flex: 1;
+    padding: 12px 0;
+}
+
+.admin-sidebar__section {
+    padding: 14px 20px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #64748b;
+}
+
+.admin-sidebar__link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.15s, color 0.15s;
+}
+
+.admin-sidebar__link:hover,
+.admin-sidebar__link--active {
+    background: #1e293b;
+    color: #fff;
+}
+
+.admin-sidebar__footer {
+    padding: 16px 20px;
+    border-top: 1px solid #1e293b;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* Main */
+.admin-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-topbar {
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 14px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.admin-topbar__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.admin-topbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.admin-content {
+    padding: 28px;
+    flex: 1;
+}
+
+/* Cards / Stats */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.admin-stat {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.admin-stat__label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.05em;
+}
+
+.admin-stat__value {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 6px;
+}
+
+.admin-stat__icon {
+    font-size: 20px;
+    color: #ff4747;
+}
+
+/* Card genérico */
+.admin-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.admin-card__header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+}
+
+.admin-card__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.admin-card__body {
+    padding: 20px;
+}
+
+/* Tabla */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.admin-table th {
+    text-align: left;
+    padding: 10px 12px;
+    color: #64748b;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.admin-table td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+}
+
+.admin-table tr:last-child td { border-bottom: none; }
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+.badge--pending { background: #fef3c7; color: #92400e; }
+.badge--success { background: #dcfce7; color: #166534; }
+.badge--danger { background: #fee2e2; color: #991b1b; }
+.badge--info { background: #dbeafe; color: #1e40af; }
+.badge--neutral { background: #f1f5f9; color: #475569; }
+
+/* Botones */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.btn--primary { background: #ff4747; color: #fff; border-color: #ff4747; }
+.btn--primary:hover { background: #e03e3e; }
+.btn--dark { background: #0f172a; color: #fff; }
+.btn--dark:hover { background: #1e293b; }
+.btn--outline { background: #fff; color: #334155; border-color: #cbd5e1; }
+.btn--outline:hover { background: #f8fafc; }
+.btn--ghost { background: transparent; color: #334155; }
+.btn--ghost:hover { background: #f1f5f9; }
+.btn--danger { background: #dc2626; color: #fff; }
+.btn--danger:hover { background: #b91c1c; }
+.btn--sm { padding: 6px 10px; font-size: 12px; }
+
+/* Formularios admin */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+@media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group--full { grid-column: 1 / -1; }
+.form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #334155;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.form-control {
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.form-control:focus {
+    border-color: #ff4747;
+    box-shadow: 0 0 0 3px rgba(255,71,71,0.15);
+}
+.form-help { font-size: 12px; color: #64748b; }
+.form-error { font-size: 12px; color: #dc2626; }
+
+/* Alertas */
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 16px;
+    border: 1px solid;
+}
+.alert--success { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.alert--error { background: #fef2f2; color: #991b1b; border-color: #fecaca; }
+.alert--info { background: #eff6ff; color: #1e40af; border-color: #bfdbfe; }
+
+/* Paginación simple */
+.pagination { display: flex; gap: 6px; margin-top: 16px; }
+.pagination a, .pagination span {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 13px;
+    text-decoration: none;
+    color: #334155;
+    background: #fff;
+}
+.pagination .active span { background: #0f172a; color: #fff; border-color: #0f172a; }
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: #64748b;
+}
+.empty-state i { font-size: 36px; color: #cbd5e1; margin-bottom: 12px; }
+
+/* Stock crítico */
+.row--danger { background: #fef2f2; }
+
+/* Imagen thumb */
+.thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+/* Timeline admin (usa pedidos.css timeline si no está) */
+.admin-timeline {
+    position: relative;
+    padding-left: 28px;
+    border-left: 2px solid #e2e8f0;
+    margin: 12px 0;
+}
+.admin-timeline__item {
+    position: relative;
+    padding: 10px 0 10px 12px;
+}
+.admin-timeline__item::before {
+    content: '';
+    position: absolute;
+    left: -34px;
+    top: 14px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 2px #e2e8f0;
+}
+.admin-timeline__item--done::before { background: #0ea5e9; box-shadow: 0 0 0 2px #bae6fd; }
+
+/* Stepper admin */
+.stepper { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.stepper__step { flex:1; min-width:90px; text-align:center; padding:8px 6px; border-radius:6px; font-size:11px; font-weight:700; background:#f1f5f9; color:#64748b; }
+.stepper__step--current { background:#0f172a; color:#fff; }
+.stepper__step--done { background:#ff4747; color:#fff; }

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-labelledby="title">
+  <title id="title">Imagen de producto no disponible</title>
+  <rect width="640" height="480" fill="#eef3f0"/>
+  <g fill="none" stroke="#48705f" stroke-linecap="round" stroke-linejoin="round" stroke-width="12">
+    <path d="M278 150h84v32h-84z" fill="#d6e5dc"/>
+    <path d="M300 150v-28h104v-24h48"/>
+    <path d="M276 182h88l24 34v150a28 28 0 0 1-28 28h-80a28 28 0 0 1-28-28V216z" fill="#fff"/>
+    <path d="M270 294h112v55H270z" fill="#d6e5dc" stroke="none"/>
+    <path d="M298 257h56M298 372h56"/>
+    <path d="m450 224 8 18 18 8-18 8-8 18-8-18-18-8 18-8z" fill="#efc66a" stroke="none"/>
+    <path d="m204 202 6 13 13 6-13 6-6 13-6-13-13-6 13-6z" fill="#efc66a" stroke="none"/>
+  </g>
+  <text x="320" y="445" fill="#48685a" font-family="Arial, sans-serif" font-size="22" text-anchor="middle">Imagen no disponible</text>
+</svg>
