@@ -13,84 +13,84 @@ st.font.size = Pt(12)
 st.paragraph_format.space_after = Pt(6)
 st.paragraph_format.line_spacing = 1.15
 for s in doc.sections:
-    s.top_margin=Cm(2); s.bottom_margin=Cm(2); s.left_margin=Cm(2.5); s.right_margin=Cm(2.5)
+ s.top_margin=Cm(2); s.bottom_margin=Cm(2); s.left_margin=Cm(2.5); s.right_margin=Cm(2.5)
 
 def h(text, lvl):
-    hd = doc.add_heading(level=lvl)
-    r = hd.add_run(text)
-    r.bold=True; r.font.name='Arial'
-    r.font.size=Pt({1:16,2:13,3:11}.get(lvl,12))
-    r.font.color.rgb=RGBColor(0x0F,0x17,0x2A)
-    hd.paragraph_format.space_before=Pt(10); hd.paragraph_format.space_after=Pt(6)
-    return hd
+ hd = doc.add_heading(level=lvl)
+ r = hd.add_run(text)
+ r.bold=True; r.font.name='Arial'
+ r.font.size=Pt({1:16,2:13,3:11}.get(lvl,12))
+ r.font.color.rgb=RGBColor(0x0F,0x17,0x2A)
+ hd.paragraph_format.space_before=Pt(10); hd.paragraph_format.space_after=Pt(6)
+ return hd
 
 def p(text, bold=False, italic=False, size=11, color=None, align=WD_ALIGN_PARAGRAPH.JUSTIFY, bullet=False, after=6):
-    para = doc.add_paragraph(style='List Bullet' if bullet else 'Normal')
-    r = para.add_run(text)
-    r.bold=bold; r.italic=italic; r.font.name='Arial'; r.font.size=Pt(size)
-    if color: r.font.color.rgb=RGBColor.from_string(color)
-    para.alignment=align; para.paragraph_format.space_after=Pt(after); para.paragraph_format.line_spacing=1.15
-    return para
+ para = doc.add_paragraph(style='List Bullet' if bullet else 'Normal')
+ r = para.add_run(text)
+ r.bold=bold; r.italic=italic; r.font.name='Arial'; r.font.size=Pt(size)
+ if color: r.font.color.rgb=RGBColor.from_string(color)
+ para.alignment=align; para.paragraph_format.space_after=Pt(after); para.paragraph_format.line_spacing=1.15
+ return para
 
 def pb(parts, align=WD_ALIGN_PARAGRAPH.JUSTIFY, after=6):
-    para = doc.add_paragraph()
-    for txt, kw in parts:
-        r = para.add_run(txt)
-        r.bold=kw.get('bold',False); r.italic=kw.get('italic',False); r.font.name='Arial'; r.font.size=Pt(kw.get('size',11))
-        if kw.get('color'): r.font.color.rgb=RGBColor.from_string(kw['color'])
-    para.alignment=align; para.paragraph_format.space_after=Pt(after); para.paragraph_format.line_spacing=1.15
-    return para
+ para = doc.add_paragraph()
+ for txt, kw in parts:
+ r = para.add_run(txt)
+ r.bold=kw.get('bold',False); r.italic=kw.get('italic',False); r.font.name='Arial'; r.font.size=Pt(kw.get('size',11))
+ if kw.get('color'): r.font.color.rgb=RGBColor.from_string(kw['color'])
+ para.alignment=align; para.paragraph_format.space_after=Pt(after); para.paragraph_format.line_spacing=1.15
+ return para
 
 def tbl(headers, rows):
-    t = doc.add_table(rows=1, cols=len(headers))
-    t.style='Light Grid Accent 1'; t.alignment=WD_TABLE_ALIGNMENT.CENTER; t.autofit=True
-    for i,hh in enumerate(headers):
-        c=t.rows[0].cells[i]; c.text=''
-        r=c.paragraphs[0].add_run(hh); r.bold=True; r.font.name='Arial'; r.font.size=Pt(9); r.font.color.rgb=RGBColor(0xFF,0xFF,0xFF)
-        c.paragraphs[0].alignment=WD_ALIGN_PARAGRAPH.CENTER
-        shd=OxmlElement('w:shd'); shd.set(qn('w:fill'),'0F172A'); c._tc.get_or_add_tcPr().append(shd)
-    for row in rows:
-        cs=t.add_row().cells
-        for i,v in enumerate(row):
-            cs[i].text=''; r=cs[i].paragraphs[0].add_run(str(v)); r.font.name='Arial'; r.font.size=Pt(9)
-    doc.add_paragraph().paragraph_format.space_after=Pt(6)
-    return t
+ t = doc.add_table(rows=1, cols=len(headers))
+ t.style='Light Grid Accent 1'; t.alignment=WD_TABLE_ALIGNMENT.CENTER; t.autofit=True
+ for i,hh in enumerate(headers):
+ c=t.rows[0].cells[i]; c.text=''
+ r=c.paragraphs[0].add_run(hh); r.bold=True; r.font.name='Arial'; r.font.size=Pt(9); r.font.color.rgb=RGBColor(0xFF,0xFF,0xFF)
+ c.paragraphs[0].alignment=WD_ALIGN_PARAGRAPH.CENTER
+ shd=OxmlElement('w:shd'); shd.set(qn('w:fill'),'0F172A'); c._tc.get_or_add_tcPr().append(shd)
+ for row in rows:
+ cs=t.add_row().cells
+ for i,v in enumerate(row):
+ cs[i].text=''; r=cs[i].paragraphs[0].add_run(str(v)); r.font.name='Arial'; r.font.size=Pt(9)
+ doc.add_paragraph().paragraph_format.space_after=Pt(6)
+ return t
 
 def cap(numero, titulo, donde, como="Abre la pantalla indicada y captura con Win+Shift+S incluyendo el reloj de la barra de tareas"):
-    box = doc.add_paragraph()
-    box.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    pr = box._p.get_or_add_pPr()
-    shd=OxmlElement('w:shd'); shd.set(qn('w:val'),'clear'); shd.set(qn('w:color'),'auto'); shd.set(qn('w:fill'),'FFF1F1')
-    pr.append(shd)
-    bdr=OxmlElement('w:pBdr')
-    for e in ['top','left','bottom','right']:
-        el=OxmlElement(f'w:{e}'); el.set(qn('w:val'),'single'); el.set(qn('w:sz'),'4'); el.set(qn('w:space'),'4'); el.set(qn('w:color'),'DC2626'); bdr.append(el)
-    pr.append(bdr)
-    r=box.add_run(f"  📸  CAPTURA {numero} — {titulo}  ")
-    r.bold=True; r.font.name='Arial'; r.font.size=Pt(10); r.font.color.rgb=RGBColor(0xDC,0x26,0x26)
-    box.paragraph_format.space_after=Pt(2)
-    q=doc.add_paragraph(); q.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    r=q.add_run(f"¿Dónde va? {donde}"); r.font.name='Arial'; r.font.size=Pt(8); r.italic=True; r.font.color.rgb=RGBColor(0x33,0x41,0x55)
-    q.paragraph_format.space_after=Pt(1)
-    w=doc.add_paragraph(); w.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    r=w.add_run(f"Cómo tomarla: {como}  •  Debe verse la fecha y hora de tu PC (barra de tareas)."); r.font.name='Arial'; r.font.size=Pt(8); r.font.color.rgb=RGBColor(0x64,0x74,0x8B)
-    w.paragraph_format.space_after=Pt(2)
-    b=doc.add_paragraph(); b.alignment=WD_ALIGN_PARAGRAPH.CENTER
-    r=b.add_run("┌─────────────────────────────────────────────────┐\n│   PEGA AQUÍ TU CAPTURA (Insertar > Imágenes)   │\n└─────────────────────────────────────────────────┘")
-    r.font.name='Consolas'; r.font.size=Pt(8); r.font.color.rgb=RGBColor(0x94,0xA3,0xB8)
-    b.paragraph_format.space_after=Pt(12)
+ box = doc.add_paragraph()
+ box.alignment=WD_ALIGN_PARAGRAPH.CENTER
+ pr = box._p.get_or_add_pPr()
+ shd=OxmlElement('w:shd'); shd.set(qn('w:val'),'clear'); shd.set(qn('w:color'),'auto'); shd.set(qn('w:fill'),'FFF1F1')
+ pr.append(shd)
+ bdr=OxmlElement('w:pBdr')
+ for e in ['top','left','bottom','right']:
+ el=OxmlElement(f'w:{e}'); el.set(qn('w:val'),'single'); el.set(qn('w:sz'),'4'); el.set(qn('w:space'),'4'); el.set(qn('w:color'),'DC2626'); bdr.append(el)
+ pr.append(bdr)
+ r=box.add_run(f" 📸 CAPTURA {numero} — {titulo} ")
+ r.bold=True; r.font.name='Arial'; r.font.size=Pt(10); r.font.color.rgb=RGBColor(0xDC,0x26,0x26)
+ box.paragraph_format.space_after=Pt(2)
+ q=doc.add_paragraph(); q.alignment=WD_ALIGN_PARAGRAPH.CENTER
+ r=q.add_run(f"¿Dónde va? {donde}"); r.font.name='Arial'; r.font.size=Pt(8); r.italic=True; r.font.color.rgb=RGBColor(0x33,0x41,0x55)
+ q.paragraph_format.space_after=Pt(1)
+ w=doc.add_paragraph(); w.alignment=WD_ALIGN_PARAGRAPH.CENTER
+ r=w.add_run(f"Cómo tomarla: {como} • Debe verse la fecha y hora de tu PC (barra de tareas)."); r.font.name='Arial'; r.font.size=Pt(8); r.font.color.rgb=RGBColor(0x64,0x74,0x8B)
+ w.paragraph_format.space_after=Pt(2)
+ b=doc.add_paragraph(); b.alignment=WD_ALIGN_PARAGRAPH.CENTER
+ r=b.add_run("┌─────────────────────────────────────────────────┐\n│ PEGA AQUÍ TU CAPTURA (Insertar > Imágenes) │\n└─────────────────────────────────────────────────┘")
+ r.font.name='Consolas'; r.font.size=Pt(8); r.font.color.rgb=RGBColor(0x94,0xA3,0xB8)
+ b.paragraph_format.space_after=Pt(12)
 
 def code(titulo, snippet):
-    q=doc.add_paragraph(); r=q.add_run(titulo); r.bold=True; r.font.name='Arial'; r.font.size=Pt(9); r.font.color.rgb=RGBColor(0x0F,0x17,0x2A); q.paragraph_format.space_after=Pt(2)
-    pp=doc.add_paragraph(); pr=pp._p.get_or_add_pPr()
-    shd=OxmlElement('w:shd'); shd.set(qn('w:val'),'clear'); shd.set(qn('w:color'),'auto'); shd.set(qn('w:fill'),'F1F5F9'); pr.append(shd)
-    r2=pp.add_run(snippet); r2.font.name='Consolas'; r2.font.size=Pt(7); r2.font.color.rgb=RGBColor(0x1E,0x29,0x3B); pp.paragraph_format.space_after=Pt(8)
+ q=doc.add_paragraph(); r=q.add_run(titulo); r.bold=True; r.font.name='Arial'; r.font.size=Pt(9); r.font.color.rgb=RGBColor(0x0F,0x17,0x2A); q.paragraph_format.space_after=Pt(2)
+ pp=doc.add_paragraph(); pr=pp._p.get_or_add_pPr()
+ shd=OxmlElement('w:shd'); shd.set(qn('w:val'),'clear'); shd.set(qn('w:color'),'auto'); shd.set(qn('w:fill'),'F1F5F9'); pr.append(shd)
+ r2=pp.add_run(snippet); r2.font.name='Consolas'; r2.font.size=Pt(7); r2.font.color.rgb=RGBColor(0x1E,0x29,0x3B); pp.paragraph_format.space_after=Pt(8)
 
 # PORTADA
 pp=doc.add_paragraph(); pp.alignment=WD_ALIGN_PARAGRAPH.CENTER
 r=pp.add_run("Año de la Esperanza y el Fortalecimiento de la Democracia"); r.font.name='Arial'; r.font.size=Pt(9); r.italic=True; r.font.color.rgb=RGBColor(0x64,0x74,0x8B)
 pp=doc.add_paragraph(); pp.alignment=WD_ALIGN_PARAGRAPH.CENTER
-r=pp.add_run("Facultad de Ingeniería  •  Escuela Académica de Sistemas e Informática"); r.bold=True; r.font.name='Arial'; r.font.size=Pt(10)
+r=pp.add_run("Facultad de Ingeniería • Escuela Académica de Sistemas e Informática"); r.bold=True; r.font.name='Arial'; r.font.size=Pt(10)
 pp.paragraph_format.space_after=Pt(14)
 pp=doc.add_paragraph(); pp.alignment=WD_ALIGN_PARAGRAPH.CENTER
 r=pp.add_run("PRODUCTO ACADÉMICO — ENTREGABLE FINAL"); r.bold=True; r.font.name='Arial'; r.font.size=Pt(12); r.font.color.rgb=RGBColor(0xFF,0x47,0x47); pp.paragraph_format.space_after=Pt(4)
@@ -101,12 +101,12 @@ pr=pp._p.get_or_add_pPr(); shd=OxmlElement('w:shd'); shd.set(qn('w:val'),'clear'
 r=pp.add_run("Sistema Web para la Gestión Empresarial\ny Comercialización de Productos de Limpieza\nCCOLCAS"); r.font.name='Arial'; r.font.size=Pt(15); r.bold=True; r.font.color.rgb=RGBColor(0xFF,0xFF,0xFF)
 pp.paragraph_format.space_before=Pt(10); pp.paragraph_format.space_after=Pt(10)
 pp=doc.add_paragraph(); pp.alignment=WD_ALIGN_PARAGRAPH.CENTER
-r=pp.add_run("CCOLCA'S — Inventario, Almacén y Ventas  •  Laravel 12  •  PHP 8.2  •  MySQL (ccolcasdb)"); r.font.name='Arial'; r.font.size=Pt(8); r.italic=True; r.font.color.rgb=RGBColor(0x64,0x74,0x8B); pp.paragraph_format.space_after=Pt(16)
+r=pp.add_run("CCOLCA'S — Inventario, Almacén y Ventas • Laravel 12 • PHP 8.2 • MySQL (ccolcasdb)"); r.font.name='Arial'; r.font.size=Pt(8); r.italic=True; r.font.color.rgb=RGBColor(0x64,0x74,0x8B); pp.paragraph_format.space_after=Pt(16)
 tbl(["",""],[["DOCENTE:","Christian Alonso Vega Cervantes"],["AUTOR:","Suble Lima Denilson Rivaldo"],["REPOSITORIO:","https://github.com/75957473-design/Colcas.git"]])
 pp=doc.add_paragraph(); pp.alignment=WD_ALIGN_PARAGRAPH.CENTER; pp.paragraph_format.space_before=Pt(14)
-r=pp.add_run("HUANCAYO — PERÚ  •  Sede Cusco  •  2026"); r.bold=True; r.font.name='Arial'; r.font.size=Pt(10)
+r=pp.add_run("HUANCAYO — PERÚ • Sede Cusco • 2026"); r.bold=True; r.font.name='Arial'; r.font.size=Pt(10)
 pp=doc.add_paragraph(); pp.alignment=WD_ALIGN_PARAGRAPH.CENTER
-r=pp.add_run("Este documento integra lo trabajado en PA1 y PA3 y responde a todo lo pedido en ContenidoEntregableFinal.docx"); r.font.name='Arial'; r.font.size=Pt(8); r.italic=True; r.font.color.rgb=RGBColor(0x47,0x56,0x6B)
+r=pp.add_run("Este documento integra lo trabajado en el trabajo previo y responde a todo lo pedido en ContenidoEntregableFinal.docx"); r.font.name='Arial'; r.font.size=Pt(8); r.italic=True; r.font.color.rgb=RGBColor(0x47,0x56,0x6B)
 pp=doc.add_paragraph(); pp.alignment=WD_ALIGN_PARAGRAPH.CENTER
 r=pp.add_run("Generado "+datetime.datetime.now().strftime("%d/%m/%Y %H:%M")+" — Texto en lenguaje natural. Reemplaza las capturas antes de entregar."); r.font.name='Arial'; r.font.size=Pt(7); r.italic=True; r.font.color.rgb=RGBColor(0xDC,0x26,0x26)
 doc.add_page_break()
@@ -116,7 +116,7 @@ h("Índice — ¿Qué hay en este documento?",1)
 p("Te dejo aquí un mapa rápido para que encuentres cada parte. Todo está escrito en lenguaje sencillo, como si te lo explicara en clase.", size=10, italic=True)
 idx=["1. Nombre del proyecto","2. Descripción del proyecto (quién es CCOLCAS y qué le duele)","3. Definición del producto (qué hace el sistema)","4. ¿Es una app nativa o híbrida? Explicado fácil (con DHARMA)","5. Cómo está construido — Arquitectura","6. Plan de trabajo en 4 semanas","7. Análisis y diseño — resumen","8. Casos de uso (quién puede hacer qué)","9. Clases (cómo se organizan los datos)","10. Mapa de navegación (cómo te mueves en la web)","11. Procesos del negocio paso a paso","12. Las pantallas de la aplicación (aquí van muchas capturas)","13. Método, metodología y estrategia (OOHDM, incremental)","14. Modelo de calidad ISO 25010","15. Pruebas — cómo comprobamos que funciona","16. Medidas de seguridad que ya tiene","17. Contramedidas — qué más le pondríamos","18. Conclusiones","19. Referencias","20. Anexos — código y pruebas con foto de fecha/hora"]
 for it in idx:
-    q=doc.add_paragraph(); r=q.add_run(it); r.font.name='Arial'; r.font.size=Pt(9); q.paragraph_format.space_after=Pt(1)
+ q=doc.add_paragraph(); r=q.add_run(it); r.font.name='Arial'; r.font.size=Pt(9); q.paragraph_format.space_after=Pt(1)
 
 h("Guía rápida de capturas — Léeme primero",2)
 p("Tu profesor pide que cada captura muestre la fecha y hora de tu computadora. Por eso, en todo el documento verás cajitas rojas como esta:", bold=True, size=10, color="DC2626")
@@ -142,7 +142,7 @@ doc.add_page_break()
 # 1 NOMBRE
 h("1. Nombre del proyecto",1)
 p("El proyecto se llama CCOLCA'S — Sistema Web de Gestión de Inventario, Almacén y Ventas.", bold=True, size=12, color="0F172A")
-p("En palabras simples: es la página web de la empresa CCOLCAS para vender sus productos de limpieza y controlar todo lo que entra y sale del almacén. El nombre oficial que aparece en tus trabajos PA1 y PA3 es:", size=11)
+p("En palabras simples: es la página web de la empresa CCOLCAS para vender sus productos de limpieza y controlar todo lo que entra y sale del almacén. El nombre oficial que aparece en tus trabajos el trabajo previo es:", size=11)
 p("“Sistema Web para la Gestión Empresarial y Comercialización de Productos de Limpieza de CCOLCAS” — Sede Cusco, 2026.", italic=True, size=11, color="334155")
 
 # 2 DESCRIPCION
@@ -157,13 +157,13 @@ tbl(["Persona","¿Qué hace?"],[
 ["Encargado de almacén","Anota lo que entra y sale, cuenta el stock."],
 ["Vendedor","Atiende clientes, toma pedidos y cierra ventas."],
 ["Cliente","Entra a la web, ve el catálogo y hace su pedido."]])
-h("2.2 ¿Cómo trabajaban antes? (PA1 §2.2)",2)
+h("2.2 ¿Cómo trabajaban antes? ",2)
 p("El cliente escribía por WhatsApp: “¿Tienes detergente de 5 litros?”. El vendedor tenía que buscar en varios archivos si había stock y a qué precio estaba. Si el cliente decía “sí, lo quiero”, el vendedor le avisaba al encargado de almacén para que lo prepare y lo envíe. El encargado lo anotaba en un cuaderno y después le pasaba el dato al contador para que lo ponga en Excel. Todo era manual y se demoraba.", size=11)
 p("Resultado: información desactualizada, demoras y mucho papeleo.", italic=True, size=11, color="64748B")
-h("2.3 ¿Qué problemas encontramos? (PA1 §2.3)",2)
+h("2.3 ¿Qué problemas encontramos? ",2)
 for t in ["La información estaba regada entre cuadernos y Excels.","El inventario se actualizaba tarde (primero en papel, luego en digital).","Nadie sabía rápido cuánto había en stock.","Las ventas por WhatsApp no tenían un orden ni seguimiento.","Los precios se calculaban a mano.","Cada área trabajaba por su lado, sin conectarse.","No había una página web propia para mostrar los productos."]:
-    p(t, bullet=True, size=11, after=2)
-h("2.4 ¿Qué necesitaban? (PA1 §2.4)",2)
+ p(t, bullet=True, size=11, after=2)
+h("2.4 ¿Qué necesitaban? ",2)
 p("Una sola página web donde todo esté junto: productos, precios, inventario con varios almacenes, clientes, pedidos y ventas. Y que el cliente pueda entrar, ver el catálogo como en una tienda online y hacer su pedido directamente por la web, sin depender de WhatsApp. Además, que cada trabajador solo vea lo que le toca según su rol — por ejemplo, el cliente no puede entrar al panel de administración.", size=11)
 
 # 3 DEFINICION PRODUCTO
@@ -171,7 +171,7 @@ h("3. Definición del producto — ¿Qué hace el sistema?",1)
 h("3.1 ¿Qué es exactamente?",2)
 p("Es una aplicación web interactiva. Eso quiere decir que tú entras con tu navegador (Chrome, por ejemplo) y puedes hacer cosas: buscar productos, agregarlos al carrito y confirmar tu pedido. Del otro lado, hay un servidor que guarda todo en una base de datos MySQL llamada ccolcasdb. Está hecho con Laravel 12 (un framework de PHP 8.2) y se prueba en XAMPP en tu computadora.", size=11)
 p("En corto: la web centraliza todo lo que antes estaba separado y deja que el cliente confirme su pedido por la web. Después, cada trabajador avanza ese pedido desde la web según su rol, y el cliente puede ver en qué estado va su pedido en tiempo real (como cuando ves el seguimiento de un delivery).", size=11, italic=True)
-h("3.2 ¿Para qué sirve? (Objetivo PA1 §3.2)",2)
+h("3.2 ¿Para qué sirve? (Objetivo §3.2)",2)
 p("Para que CCOLCAS trabaje más rápido y ordenado: tener todo centralizado, saber siempre cuánto hay en stock, actualizar precios sin Excel, organizar pedidos y ventas, y tener una tienda online que atienda 24/7.", size=11)
 h("3.3 ¿Quiénes lo usan?",2)
 p("Los mismos 6 roles de arriba. Cada uno entra con su usuario y contraseña, y el sistema le muestra solo lo que puede hacer. Un cliente no puede ver el panel de administración; un almacenero no puede crear usuarios. Eso se controla con lo que llamamos RBAC — control por roles.", size=11)
@@ -187,11 +187,11 @@ tbl(["Módulo","¿Qué hace? En palabras simples"],[
 ["G. Ventas","Cuando el pedido ya se entregó, aquí se registra la venta con boleta, factura o nota de venta, y se descuenta del stock automáticamente."],
 ["H. Usuarios y roles","Aquí el admin crea usuarios y les dice qué rol tienen (vendedor, almacenero, etc.). Solo admin y gerente pueden entrar aquí."],
 ])
-h("3.5 ¿Qué entra y qué no entra en esta primera versión? (PA1 §4)",2)
+h("3.5 ¿Qué entra y qué no entra en esta primera versión? ",2)
 p("Sí entra (lo que ya está hecho en 4 semanas): usuarios, roles, productos, categorías, precios, inventario completo (incluido mover entre almacenes), catálogo, búsqueda, clientes, pedidos con seguimiento y ventas. Todo con control por rol.", size=11)
 p("No entra por ahora (se deja para después): pagos con tarjeta, pasarela de pago, contabilidad completa y facturación electrónica oficial. ¿Por qué? Porque en 4 semanas no alcanza y es mejor tener bien lo principal que a medias todo.", size=11, color="DC2626")
 p("A futuro se puede agregar facturación electrónica y pagos en línea cuando la empresa lo necesite.", size=11, italic=True)
-h("3.6 ¿Qué gana cada uno? (PA1 §5)",2)
+h("3.6 ¿Qué gana cada uno? ",2)
 p("La empresa: todo en un solo lugar, menos papeles, mejor control del inventario, precios al día, pedidos ordenados y una tienda online visible en Cusco.", bullet=True, size=11, after=2)
 p("El personal: encuentra todo más rápido, no duplica trabajo, sabe el stock en segundos y cada uno entra solo a lo que le toca.", bullet=True, size=11, after=2)
 p("El cliente: ve el catálogo desde su celular, busca rápido, compara precios y hace su pedido sin esperar respuesta por WhatsApp.", bullet=True, size=11, after=2)
@@ -203,7 +203,7 @@ p("CCOLCAS es una aplicación web interactiva. No es una app nativa de celular, 
 h("4.1 Si hablamos de celulares: nativa vs híbrida vs web",2)
 p("App nativa: es la que instalas desde Play Store o App Store y está hecha solo para un sistema (Android o iPhone). Usa todo el celular y es muy rápida, pero hay que hacer dos versiones. CCOLCAS no es esto: no se instala, no hay APK.", bullet=True, size=11, after=2)
 p("App híbrida (de celular): es una página web metida dentro de una app, como si fuera un navegador disfrazado. Se hace con herramientas como Cordova o Flutter. CCOLCAS tampoco es esto: no usa WebView ni se empaqueta como app.", bullet=True, size=11, after=2)
-p("Aplicación web interactiva (lo que sí es CCOLCAS): entras por el navegador a http://127.0.0.1:8000 o http://localhost/Ccolcas/public y todo funciona ahí. Tiene una parte que ves (HTML, CSS, JavaScript) y una parte que no ves (PHP con Laravel que guarda en MySQL). Es lo que dice tu PA1 §6.1. Ventaja: no necesitas instalar nada, se actualiza al instante y funciona en cualquier dispositivo. Desventaja: necesitas internet y no usa al 100% el hardware del celular (pero para un catálogo y pedidos, no hace falta).", bullet=True, size=11, after=2)
+p("Aplicación web interactiva (lo que sí es CCOLCAS): entras por el navegador a http://127.0.0.1:8000 o http://localhost/Ccolcas/public y todo funciona ahí. Tiene una parte que ves (HTML, CSS, JavaScript) y una parte que no ves (PHP con Laravel que guarda en MySQL). Es lo que dice tu §6.1. Ventaja: no necesitas instalar nada, se actualiza al instante y funciona en cualquier dispositivo. Desventaja: necesitas internet y no usa al 100% el hardware del celular (pero para un catálogo y pedidos, no hace falta).", bullet=True, size=11, after=2)
 h("4.2 Si hablamos de arquitectura: sistema híbrido según DHARMA (tu texto 1)",2)
 p("Aquí viene la parte interesante que te dieron para leer. DHARMA significa 'Descubriendo Arquitecturas Híbridas Modelando Actores' y usa unos dibujitos llamados i* para explicar cómo se juntan piezas diferentes.", size=11)
 p("La idea es simple: hoy ningún sistema se hace desde cero. Todos son una mezcla — un poco de código comprado (COTS), un poco de código gratis (FOSS como Laravel), servicios de internet (como Tailwind o FontAwesome) y código hecho a medida (como tu sistema de pedidos). A esa mezcla se le dice sistema híbrido. DHARMA no te dice qué comprar, sino que primero te hace dibujar quiénes son los actores y qué necesita cada uno, antes de elegir las piezas.", size=11)
@@ -212,10 +212,10 @@ p("¿Y CCOLCAS qué es entonces? Es híbrido DHARMA por excelencia: mezcla Larav
 p("En resumen: si tu profesor te pregunta '¿es nativa?', di: No, es web interactiva, pero es híbrida en arquitectura DHARMA porque junta piezas de distinta naturaleza.", bold=True, size=11, color="0F172A")
 
 # 5 ARQUITECTURA
-h("5. Cómo está construido — La arquitectura (PA1 §6 / PA3)",1)
+h("5. Cómo está construido — La arquitectura ",1)
 h("5.1 ¿Qué tipo de arquitectura es?",2)
 p("Es una aplicación web interactiva, como te decía. Hay un cliente (lo que ves en el navegador: HTML para la estructura, CSS para los colores y formas, JavaScript para que los botones hagan cosas) y un servidor (PHP 8.2 con Laravel 12 que piensa, valida y guarda en MySQL). Todo corre en XAMPP (Apache + MySQL) en tu computadora para probar.", size=11)
-h("5.2 ¿Con qué está hecho? (PA1 §6.2)",2)
+h("5.2 ¿Con qué está hecho? ",2)
 tbl(["Capa","Con qué lo hicimos","Para qué sirve en CCOLCAS"],[
 ["Lo que ves","HTML5 + Blade, CSS separado (admin.css, pedidos.css...), Tailwind","Hace que la página se vea bonita y ordenada, y que cada área tenga su estilo."],
 ["Lo que sientes","JavaScript (admin.js...), Vite","Hace que el precio se calcule solo y que los botones confirmen antes de borrar."],
@@ -223,7 +223,7 @@ tbl(["Capa","Con qué lo hicimos","Para qué sirve en CCOLCAS"],[
 ["La memoria","MySQL (ccolcasdb) con Eloquent","Guarda 19 tablas con todo: productos, pedidos, etc. En pruebas usa SQLite."],
 ["La casa","XAMPP, Composer, Node, Git, GitHub","Donde vive el proyecto. GitHub: https://github.com/75957473-design/Colcas.git"],
 ["El candado","BCRYPT 12, @csrf, control por rol","Cuida que nadie entre donde no debe y que las contraseñas estén seguras."]])
-h("5.3 ¿Cómo se organiza el código? — MVC (PA3)",2)
+h("5.3 ¿Cómo se organiza el código? — MVC ()",2)
 p("Laravel usa un patrón llamado MVC que es como tener tres cajones separados:", size=11)
 p("Modelos (app/Models/*, 19 cajitas): son el reflejo de las tablas en código. Por ejemplo, Producto sabe calcular su precio y cuánto hay en stock. Usa palabras como belongsTo y hasMany para decir 'un producto pertenece a una categoría' o 'un pedido tiene muchos detalles'.", bullet=True, size=11, after=2)
 p("Controladores (app/Http/Controllers/*): son los que reciben tu clic, revisan que todo esté bien (validan), hablan con la base de datos y te responden. Por ejemplo, PedidoController crea el pedido y verifica el stock.", bullet=True, size=11, after=2)
@@ -235,7 +235,7 @@ p("Todo gira alrededor de: productos, categorías, precios, inventario, clientes
 cap("2", "Base de datos ccolcasdb + archivo .env", "Abre phpMyAdmin (http://localhost/phpmyadmin) y muestra la BD ccolcasdb con sus tablas, y abre .env donde se ve DB_DATABASE=ccolcasdb y BCRYPT_ROUNDS=12")
 
 # 6 PLAN TRABAJO
-h("6. Plan de trabajo — 4 semanas (PA1 §7, desde el 04/09/2026)",1)
+h("6. Plan de trabajo — 4 semanas ",1)
 p("El proyecto se hizo en un mes, dividido en 4 semanas. Así fue:", size=11)
 tbl(["Semana","Fechas","¿Qué hicimos? Explicado fácil"],[
 ["Semana 1","04/09 – 10/09/2026","Fuimos a CCOLCAS, vimos cómo vendían, qué problemas tenían, y definimos qué debía hacer el sistema y quién lo usaría."],
@@ -251,7 +251,7 @@ cap("3", "Plan de trabajo — evidencia de avance", "Captura de GitHub > Commits
 
 # 7 ANALISIS
 h("7. Análisis y diseño — En resumen",1)
-p("Analizamos: vimos los problemas (§2.3), la necesidad (§2.4), qué debía hacer el sistema (8 módulos) y qué no (pagos/facturación), y qué ganaría cada uno. Validamos todo con entrevistas y poniendo límites reales (4 semanas, XAMPP local).", size=11)
+p("Analizamos: vimos los problemas , la necesidad , qué debía hacer el sistema (8 módulos) y qué no (pagos/facturación), y qué ganaría cada uno. Validamos todo con entrevistas y poniendo límites reales (4 semanas, XAMPP local).", size=11)
 p("Diseñamos: con OOHDM hicimos el modelo conceptual (19 tablas), el navegacional (mapa de cómo te mueves), la interfaz (pantallas Blade + Tailwind separadas por área) y la implementación (MVC en Laravel). Todo con calidad ISO 25010 y seguridad pensada desde el inicio (MADEJA/UCI/OWASP/INCIBE).", size=11)
 tbl(["Qué entregamos","Qué contiene","Dónde lo ves"],[
 ["Casos de Uso","6 actores × 8 módulos","§8 + foto del diagrama"],
@@ -272,14 +272,14 @@ tbl(["Módulo","¿Quién hace qué?"],[
 ["F. Pedidos","Cliente: crea su pedido por la web y ve su avance. Vendedor: confirma o cancela. Almacén: prepara y envía. Contador: cierra."],
 ["G. Ventas","Vendedor/contador/admin: registran la venta con boleta/factura y descuentan del stock."],
 ["H. Usuarios y roles","Solo admin y gerente: crean usuarios y asignan roles."]])
-cap("4", "Diagrama de Casos de Uso — General", "Foto del diagrama general de PA3 (image1.png) — debe verse completo")
+cap("4", "Diagrama de Casos de Uso — General", "Foto del diagrama general de (image1.png) — debe verse completo")
 for idx, tit in enumerate(["A. Productos","B. Inventario","C. Precios","D. Catálogo","E. Clientes","F. Pedidos","G. Ventas","H. Usuarios y roles"], start=5):
-    cap(str(idx), f"Casos de Uso — {tit}", "Si no tienes uno por módulo, usa el general y explica con la tabla de arriba")
+ cap(str(idx), f"Casos de Uso — {tit}", "Si no tienes uno por módulo, usa el general y explica con la tabla de arriba")
 
 # 9 CLASES
 h("9. Diagrama de Clases — ¿Cómo se guardan los datos?",1)
 p("Este diagrama muestra las 19 cajitas de datos y cómo se conectan. Por ejemplo: un producto pertenece a una categoría, un producto puede estar en varios almacenes (stock_por_almacen), un rol tiene muchos usuarios, un cliente tiene muchos pedidos, un pedido tiene muchos detalles y una venta, etc. Todo esto está en app/Models/* con Eloquent y se habla con palabras como belongsTo (pertenece a) y hasMany (tiene muchos).", size=11)
-cap("13", "Diagrama de Clases — Eloquent", "Foto del diagrama de clases de PA3 (image2.png) o genera uno con php artisan generate:erd docs/diagrama.png")
+cap("13", "Diagrama de Clases — Eloquent", "Foto del diagrama de clases de (image2.png) o genera uno con php artisan generate:erd docs/diagrama.png")
 tbl(["Entidad","Datos que guarda","Qué sabe hacer"],[
 ["Producto","código, nombre, foto, costo, flete, margen, precio, stock mínimo","Calcular precio, sumar stock total, saber si está crítico"],
 ["Pedido","cliente, estado, vendedor, total, dirección","Tener historial, detalles y venta asociada"],
@@ -297,26 +297,26 @@ tbl(["Zona","Páginas (nodos)","¿Quién puede entrar?"],[
 ["Admin — General","Panel, productos, categorías","Solo personal (no cliente)"],
 ["Admin — Operaciones","Inventario (movimientos, ajuste, transferencia), pedidos, ventas","Personal según su rol"],
 ["Admin — Gestión","Clientes, usuarios y roles (solo admin/gerente)","Restringido"]])
-cap("14", "Mapa de Navegación Web", "Foto del mapa de PA3 (image3.png) — que se vean las flechas Cliente vs Admin")
+cap("14", "Mapa de Navegación Web", "Foto del mapa de (image3.png) — que se vean las flechas Cliente vs Admin")
 
 # 11 PROCESOS
 h("11. Procesos del negocio — Paso a paso (Diagramas de Secuencia)",1)
 p("Estos diagramas son como historietas que muestran qué pasa en el tiempo, mensaje por mensaje. Tenemos tres:", size=11)
 h("11.1 Proceso principal: cómo se vende y atiende un pedido",2)
 p("El cliente ve el catálogo → agrega al carrito → va al checkout (el sistema verifica precio y stock de verdad en la BD) → se crea el pedido en Pendiente y aparece en 'Mis pedidos' con una barrita de pasos → el vendedor lo confirma → el almacén lo prepara y envía → el contador lo marca como entregado o se registra la venta (que descuenta del stock). Todo esto está en PedidoController, PedidoWorkflowService y VentaController.", size=11)
-cap("15", "Secuencia — Flujo Comercial (ventas y pedidos)", "Foto del diagrama de PA3 (image5.png)")
+cap("15", "Secuencia — Flujo Comercial (ventas y pedidos)", "Foto del diagrama de (image5.png)")
 h("11.2 Proceso de abastecimiento: cómo entra mercadería",2)
 p("El proveedor trae productos → se registra la compra (tabla compras y detalle_compras con almacén) → se crea un movimiento de ENTRADA → el stock en stock_por_almacen sube. Simple: compra → entrada → más stock.", size=11)
-cap("16", "Secuencia — Abastecimiento (compras)", "Foto del diagrama de PA3 (image6.png)")
+cap("16", "Secuencia — Abastecimiento (compras)", "Foto del diagrama de (image6.png)")
 h("11.3 Proceso de control: mover productos entre almacenes",2)
 p("Aquí entra lo nuevo que agregamos: InventarioController@transferir. Verifica que origen y destino sean distintos, bloquea el stock de origen para que nadie lo toque a la vez, verifica que haya suficiente, resta en origen, suma en destino y crea dos movimientos (Salida por Transferencia y Entrada por Transferencia). Todo en una transacción: o se hace todo o no se hace nada.", size=11)
-cap("17", "Secuencia — Transferencia multialmacén", "Foto del diagrama de PA3 (image7.png) + captura de /admin/inventario con el formulario de Transferencia")
+cap("17", "Secuencia — Transferencia multialmacén", "Foto del diagrama de (image7.png) + captura de /admin/inventario con el formulario de Transferencia")
 
 # 12 INTERFACES
 h("12. Las pantallas de la aplicación — Te muestro cada una",1)
 p("Todas las pantallas están hechas con Blade y Tailwind, y cada área tiene su CSS separado (inicio.css para lo público, admin.css para el panel, pedidos.css para el seguimiento, carrito.css). Cada una tiene su JavaScript separado también. ¡Recuerda: cada foto debe mostrar la fecha y hora de tu PC!", bold=True, size=11, color="DC2626")
 ifs=[
-("12.1 Catálogo (/) — La vitrina","Aquí el cliente ve todo: arriba la barra con buscador y filtro por categoría y el numerito del carrito; en el medio las tarjetas con foto (images/products/*.jpg), nombre, categoría, descripción, precio en soles, cuánto hay en stock y el botón Añadir. Solo se muestran productos activos. Lo maneja HomeController.","/  (welcome.blade.php)"),
+("12.1 Catálogo (/) — La vitrina","Aquí el cliente ve todo: arriba la barra con buscador y filtro por categoría y el numerito del carrito; en el medio las tarjetas con foto (images/products/*.jpg), nombre, categoría, descripción, precio en soles, cuánto hay en stock y el botón Añadir. Solo se muestran productos activos. Lo maneja HomeController.","/ (welcome.blade.php)"),
 ("12.2 Carrito (/carrito) — Tu canasta","Ves una tabla con lo que agregaste: foto, precio, cantidad que puedes cambiar, subtotal y botón para quitar. Al costado el resumen total. Todo vive en la sesión. Lo maneja CarritoController.","/carrito"),
 ("12.3 Login y Registro (ventana emergente)","Dos pestañas: Ingresar (email y contraseña, que se verifica con Hash) y Registrarse como Cliente (nombre, DNI/RUC, teléfono, email y contraseña). Al registrarse, crea tu usuario y cliente juntos y te loguea. Después te manda al inicio si eres cliente o al panel si eres personal.","Ventana modal en /"),
 ("12.4 Checkout (/checkout) — Confirmar pedido","Aquí pones a dónde te lo llevan (ya viene pre-llenado), eliges boleta o factura y dejas una observación si quieres. Ves el resumen y el total. Al confirmar, el sistema revisa de nuevo precio y stock reales en la BD (por si alguien intentó hacer trampa). Si todo está bien, crea el pedido y te lleva a 'Mis pedidos'.","/checkout (necesitas estar logueado y tener algo en el carrito)"),
@@ -331,13 +331,13 @@ ifs=[
 ]
 cnum=18
 for tit, desc, ruta in ifs:
-    h(tit,2); p(desc, size=10)
-    q=doc.add_paragraph(); r=q.add_run("¿Dónde la encuentro? Ruta: "+ruta); r.font.name='Arial'; r.font.size=Pt(8); r.italic=True; q.paragraph_format.space_after=Pt(1)
-    cap(str(cnum), tit, "Ruta: "+ruta, "Abre esa ruta en tu navegador a pantalla completa y captura con Win+Shift+S")
-    cnum+=1
+ h(tit,2); p(desc, size=10)
+ q=doc.add_paragraph(); r=q.add_run("¿Dónde la encuentro? Ruta: "+ruta); r.font.name='Arial'; r.font.size=Pt(8); r.italic=True; q.paragraph_format.space_after=Pt(1)
+ cap(str(cnum), tit, "Ruta: "+ruta, "Abre esa ruta en tu navegador a pantalla completa y captura con Win+Shift+S")
+ cnum+=1
 
 # 13
-h("13. Método, metodología y estrategia — ¿Cómo hicimos el proyecto? (PA3)",1)
+h("13. Método, metodología y estrategia — ¿Cómo hicimos el proyecto? ()",1)
 h("13.1 La metodología: OOHDM (nuestra guía de diseño)",2)
 p("Elegimos OOHDM (Método de Diseño Hipermedia Orientado a Objetos) porque es perfecta para páginas web que tienen una parte pública (catálogo) y una parte privada (panel por rol). OOHDM nos dice: primero piensa qué datos necesitas, luego cómo se va a navegar, luego cómo se va a ver y recién ahí programas. Así no mezclas todo.", size=11)
 tbl(["Fase OOHDM","¿Qué hicimos en CCOLCAS? Explicado fácil"],[
@@ -352,14 +352,14 @@ tbl(["Incremento","¿Qué entregamos?"],[
 ["2. Persistencia y seguridad","Creamos las 19 tablas, el .env, los usuarios con contraseña segura (hash) y el login con control por rol."],
 ["3. Catálogo y almacén","Hicimos productos, categorías, stock por almacén, fórmula de precios y transferencias entre almacenes."],
 ["4. Comercial, auditoría e integración","Hicimos pedidos con flujo por rol y su historial, ventas con comprobantes, la bitácora que anota todo automáticamente y las pruebas finales."]])
-h("13.3 ¿Cómo lo evaluamos? — Método tripartito (PA3)",2)
+h("13.3 ¿Cómo lo evaluamos? — Método tripartito ()",2)
 p("No basta con que funcione; hay que ver si es fácil de usar y si es seguro. Por eso usamos tres formas:", size=11)
 p("1) Heurística de Nielsen: revisamos 10 reglas de usabilidad en las pantallas clave (login, catálogo, checkout) — por ejemplo, si se ve claro en qué paso estás (la barrita), si los errores se entienden y si los botones hacen lo que dicen.", bullet=True, size=11, after=2)
 p("2) Pruebas funcionales: probamos reglas del negocio — por ejemplo, que no te deje agregar más de lo que hay en stock, que solo el contador pueda cambiar precios y que al vender se descuente el stock.", bullet=True, size=11, after=2)
 p("3) Encuesta SUS: le preguntamos a 8-12 personas (clientes, vendedores, almaceneros, contadores) qué tan fácil les pareció usar el sistema, con una escala de 0 a 100. Si sacamos más de 68, estamos bien.", bullet=True, size=11, after=2)
 
 # 14
-h("14. Modelo de calidad — ISO/IEC 25010 (PA3)",1)
+h("14. Modelo de calidad — ISO/IEC 25010 ()",1)
 p("Usamos la norma ISO 25010, que es como un checklist internacional para decir si un software es bueno. Nos enfocamos en 4 pilares clave:", size=11)
 tbl(["Pilar (qué mide)","¿Cómo lo cumple CCOLCAS? En palabras simples"],[
 ["Adecuación Funcional (¿hace lo que debe?)","La base de datos está bien hecha sin datos repetidos, las operaciones son seguras (transacciones con lock), la barrita y línea de tiempo muestran lo real y tenemos 168 pruebas que lo comprueban."],
@@ -374,7 +374,7 @@ p("Tu profesor quiere saber qué pruebas harías para demostrar que el sistema c
 h("15.1 Pruebas unitarias — Las 168 que ya tenemos",2)
 p("Son pruebas pequeñas que revisan una sola cosa a la vez, como '¿calcula bien el precio?' o '¿detecta stock crítico?'. Usan datos falsos y mocks. Las ejecutas con php artisan test y usan una base de datos en memoria (sqlite). Hoy tenemos 168 pruebas que todas pasan (335 comprobaciones). ¡Captura esa pantalla con fecha y hora!", size=11)
 cap("30", "Pruebas unitarias — php artisan test", "Terminal: php artisan test", "Ejecuta php artisan test y captura toda la pantalla con el reloj visible")
-h("15.2 Pruebas funcionales — Las reglas del negocio (PA3)",2)
+h("15.2 Pruebas funcionales — Las reglas del negocio ()",2)
 p("Aquí probamos que el sistema respete sus propias reglas, no solo que el código corra:", size=11)
 tbl(["Regla que probamos","¿Qué hacemos?","¿Qué debe pasar?"],[
 ["Stock","Intentar agregar al carrito más de lo que hay, o hacer checkout sin stock","El sistema te dice 'Stock insuficiente' y no te deja."],
@@ -386,7 +386,7 @@ h("15.3 Pruebas de integración / Feature",2)
 p("Prueban flujos completos, como si fueras un cliente real: ver catálogo solo con productos activos, buscar y filtrar, loguearse como cliente vs personal, agregar al carrito, cambiar cantidad y ver subtotal. Tenemos 21 de estas (6 de catálogo, 7 de login, 8 de carrito).", size=11)
 h("15.4 Prueba heurística — ¿Se entiende la interfaz? (Nielsen 10)",2)
 p("Revisamos si la página es amigable: ¿se ve en qué paso del pedido estás? (sí, con la barrita), ¿los errores se entienden?, ¿hay botón para volver?, ¿todo se ve consistente (admin vs público)? Usamos el checklist de MADEJA e INCIBE básico/avanzado.", size=11)
-h("15.5 Prueba SUS — ¿Qué opina la gente? (PA3)",2)
+h("15.5 Prueba SUS — ¿Qué opina la gente? ()",2)
 p("Le preguntamos a 8-12 personas reales (clientes, vendedores, almaceneros, contadores) que usen el sistema y respondan 10 preguntas de 0 a 100. Si sacamos más de 68, estamos por encima del promedio y es usable.", size=11)
 h("15.6 ¿Qué más podríamos probar?",2)
 p("Pruebas de carga: cuántas personas pueden entrar a la vez al catálogo o al checkout (con ApacheBench o JMeter). Pruebas de seguridad: pasarle un escáner como OWASP ZAP para buscar inyecciones, XSS o CSRF. Y pruebas de regresión: cada vez que agregas algo, volver a correr todo para asegurarte que no rompiste nada. Todo esto está en docs/Planificacion de Pruebas.docx.", size=11)
@@ -434,7 +434,7 @@ p("Recomendación práctica: antes de salir a producción, haz lo básico urgent
 
 # 18
 h("18. Conclusiones — ¿Qué logramos? (ContenidoEntregableFinal)",1)
-p("1) CCOLCAS ya centraliza todo: productos, precios, inventario, pedidos y ventas con su catálogo online. Cumple los 8 módulos A–H y el alcance de la primera versión (sin pagos ni facturación electrónica, como pedía PA1). Dejamos atrás los cuadernos, Excels y el WhatsApp desordenado.", bullet=True, size=11, after=3)
+p("1) CCOLCAS ya centraliza todo: productos, precios, inventario, pedidos y ventas con su catálogo online. Cumple los 8 módulos A–H y el alcance de la primera versión (sin pagos ni facturación electrónica, como pedía ). Dejamos atrás los cuadernos, Excels y el WhatsApp desordenado.", bullet=True, size=11, after=3)
 p("2) No es una app de celular (no es nativa ni híbrida móvil), pero sí es un sistema híbrido en arquitectura DHARMA: junta piezas gratis (Laravel/MySQL), servicios web y código hecho a medida. Eso justifica haberlo hecho por partes y con capas bien separadas (OOHDM).", bullet=True, size=11, after=3)
 p("3) La arquitectura MVC + control por rol + auditoría automática (Observer + historial) + flujo de pedidos por rol demuestra que está bien separado, es auditable (ISO 25010) y seguro (MADEJA/UCI). El flujo 100% web — cliente confirma y ve su barrita, cada trabajador avanza donde le toca — cumple exactamente lo que CCOLCAS necesitaba.", bullet=True, size=11, after=3)
 p("4) Lo probamos bien: 168 pruebas unitarias + 21 de integración + pruebas funcionales de reglas + revisión heurística + encuesta SUS propuesta. Validamos lo crítico (stock, precios por rol, descuento al vender) y la facilidad de uso. El Top 10 de OWASP está cubierto, y con las contramedidas (HTTPS, 2FA, límite de intentos) queda listo para salir a producción seguro.", bullet=True, size=11, after=3)
@@ -450,9 +450,9 @@ refs=["DHARMA — Discovering Hybrid Architectures by Modelling Actors (modelo i
 "ISO/IEC 25010 SQuaRE — Calidad del software (4 pilares).",
 "OWASP Top 10 2021 — Los 10 riesgos más comunes.",
 "Laravel 12 Docs — MVC, Eloquent, Blade, Vite, Auth.",
-"PA1_Suble_Lima (3).docx y PA3_Suble_Lima (2).docx — Base del proyecto CCOLCAS."]
+"_Suble_Lima (3).docx y _Suble_Lima (2).docx — Base del proyecto CCOLCAS."]
 for i,r in enumerate(refs,1):
-    q=doc.add_paragraph(); rr=q.add_run(f"[{i}] {r}"); rr.font.name='Arial'; rr.font.size=Pt(8); rr.font.color.rgb=RGBColor(0x47,0x56,0x6B); q.paragraph_format.space_after=Pt(2)
+ q=doc.add_paragraph(); rr=q.add_run(f"[{i}] {r}"); rr.font.name='Arial'; rr.font.size=Pt(8); rr.font.color.rgb=RGBColor(0x47,0x56,0x6B); q.paragraph_format.space_after=Pt(2)
 
 # 20 ANEXOS
 h("20. Anexos — Lo que tu profesor pide al final (ContenidoEntregableFinal)",1)
@@ -463,19 +463,19 @@ p("Te dejo los pedacitos más importantes de cada módulo. El código completo e
 
 code("A.1 Productos — ¿Cómo calcula el precio?", """// Producto.php
 public function calcularPrecioVenta(): float {
-  $costoTotal = $this->costo_compra + $this->costo_flete;
-  return round($costoTotal * (1 + $this->margen_ganancia / 100), 2);
+ $costoTotal = $this->costo_compra + $this->costo_flete;
+ return round($costoTotal * (1 + $this->margen_ganancia / 100), 2);
 }
 // Ejemplo: costo 10 + flete 2 = 12, margen 20% => 12 * 1.20 = 14.40""")
 
 code("A.2 Inventario — Mover entre almacenes", """// InventarioController@transferir
 DB::transaction(function() use($data){
-  $origen = StockPorAlmacen::where(...)->lockForUpdate()->first();
-  if($data['cantidad'] > $origen->cantidad) throw new Exception("Stock insuficiente");
-  $origen->decrement('cantidad', $data['cantidad']);
-  $destino = StockPorAlmacen::firstOrCreate([...], ['cantidad'=>0]);
-  $destino->increment('cantidad', $data['cantidad']);
-  // Crea 2 movimientos: Salida por Transferencia y Entrada por Transferencia
+ $origen = StockPorAlmacen::where(...)->lockForUpdate()->first();
+ if($data['cantidad'] > $origen->cantidad) throw new Exception("Stock insuficiente");
+ $origen->decrement('cantidad', $data['cantidad']);
+ $destino = StockPorAlmacen::firstOrCreate([...], ['cantidad'=>0]);
+ $destino->increment('cantidad', $data['cantidad']);
+ // Crea 2 movimientos: Salida por Transferencia y Entrada por Transferencia
 });""")
 
 code("A.3 Pedidos — ¿Quién puede mover el pedido? (Workflow por rol)", """// PedidoWorkflowService
@@ -495,18 +495,18 @@ code("A.5 Seguridad — El guardián de roles", """// bootstrap/app.php -> alias
 // RoleMiddleware: if(in_array($rol->nombre, $roles)) deja pasar, si no 403""")
 
 code("A.6 Ventas — ¿Cómo descuenta stock al vender?", """DB::transaction(function() use($data,$pedido){
-  $venta = Venta::create([...]);
-  foreach($pedido->detalles as $d){
-    $stock = StockPorAlmacen::where('producto_id',$d->producto_id)->lockForUpdate()->first();
-    $stock?->decrement('cantidad',$d->cantidad);
-    MovimientoInventario::create([... 'Salida por Venta' ...]);
-  }
+ $venta = Venta::create([...]);
+ foreach($pedido->detalles as $d){
+ $stock = StockPorAlmacen::where('producto_id',$d->producto_id)->lockForUpdate()->first();
+ $stock?->decrement('cantidad',$d->cantidad);
+ MovimientoInventario::create([... 'Salida por Venta' ...]);
+ }
 });""")
 
 code("A.7 Checkout — ¿Cómo crea el pedido sin trampa?", """DB::transaction(function() use($request,$cliente,$carrito){
-  // Vuelve a leer precio y stock reales de la BD (por si el carrito fue manipulado)
-  $productos = Producto::with('stocks')->whereIn('id', array_keys($carrito))->get();
-  // Verifica stock, crea Pedido + DetallePedido + HistorialPedido inicial
+ // Vuelve a leer precio y stock reales de la BD (por si el carrito fue manipulado)
+ $productos = Producto::with('stocks')->whereIn('id', array_keys($carrito))->get();
+ // Verifica stock, crea Pedido + DetallePedido + HistorialPedido inicial
 });""")
 
 h("Anexo B — Código de conexión a la base de datos",2)
@@ -540,12 +540,12 @@ tbl(["Anexo","¿Qué prueba? En simple","Comando / Ruta donde tomarla"],[
 ["C.9","Permisos — cliente no entra a admin","/admin/dashboard con usuario cliente (403)"],
 ["C.10","Todo — 168 tests + build","php artisan test + npm run build"]])
 for num, tit in [("C.1","Catálogo"),("C.2","Carrito"),("C.3","Login/Registro"),("C.4","Checkout → Pedido"),("C.5","Inventario"),("C.6","Productos/Precios"),("C.7","Pedidos workflow"),("C.8","Ventas"),("C.9","RBAC 403"),("C.10","Tests globales (168) + build")]:
-    cap(num, tit, "Ver tabla de arriba", "Captura con fecha/hora — pega aquí")
+ cap(num, tit, "Ver tabla de arriba", "Captura con fecha/hora — pega aquí")
 
 pp=doc.add_paragraph(); pp.alignment=WD_ALIGN_PARAGRAPH.CENTER; pp.paragraph_format.space_before=Pt(16)
-r=pp.add_run("— Fin del Entregable Final —  CCOLCAS  •  Suble Lima Denilson Rivaldo  •  Ingeniería Web  •  Sede Cusco 2026 —"); r.bold=True; r.font.name='Arial'; r.font.size=Pt(9); r.font.color.rgb=RGBColor(0x0F,0x17,0x2A)
+r=pp.add_run("— Fin del Entregable Final — CCOLCAS • Suble Lima Denilson Rivaldo • Ingeniería Web • Sede Cusco 2026 —"); r.bold=True; r.font.name='Arial'; r.font.size=Pt(9); r.font.color.rgb=RGBColor(0x0F,0x17,0x2A)
 pp=doc.add_paragraph(); pp.alignment=WD_ALIGN_PARAGRAPH.CENTER
-r=pp.add_run("¿Listo para entregar? Reemplaza todas las cajitas 📸 con tus fotos reales, guarda como: Suble_Lima_Denilson_Rivaldo_EntregableFinal.docx  •  Arial 12  •  Páginas numeradas"); r.font.name='Arial'; r.font.size=Pt(8); r.italic=True; r.font.color.rgb=RGBColor(0xDC,0x26,0x26)
+r=pp.add_run("¿Listo para entregar? Reemplaza todas las cajitas 📸 con tus fotos reales, guarda como: Suble_Lima_Denilson_Rivaldo_EntregableFinal.docx • Arial 12 • Páginas numeradas"); r.font.name='Arial'; r.font.size=Pt(8); r.italic=True; r.font.color.rgb=RGBColor(0xDC,0x26,0x26)
 
 out = r"docs/IngWebEntregabes/EntregableFinal_Suble_Lima_Denilson_Rivaldo.docx"
 doc.save(out)
