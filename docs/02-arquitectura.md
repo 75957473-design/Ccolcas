@@ -1,7 +1,7 @@
 # 02 — Arquitectura
 
 > CCOLCAS — Sistema Web de Gestión de Inventario, Almacén y Ventas
-> PA1 §6 / PA3 — Sede Cusco 2026 · Repositorio: https://github.com/75957473-design/Colcas.git
+> Sede Cusco 2026 · Repositorio: https://github.com/75957473-design/Ccolcas.git
 > Stack: **Laravel 12 · PHP 8.2 · MySQL `ccolcasdb`** (prod) / **SQLite `:memory:`** (tests) · **Vite 7 · Tailwind 4 · Blade · Eloquent ORM**
 
 ---
@@ -18,7 +18,7 @@
 
 ---
 
-## 2. Metodología — OOHDM (PA3)
+## 2. Metodología — OOHDM
 
 Elegida porque CCOLCAS tiene zona pública (catálogo) y zona privada por rol (panel admin).
 
@@ -30,7 +30,7 @@ Elegida porque CCOLCAS tiene zona pública (catálogo) y zona privada por rol (p
 | **4. Implementación** | Laravel 12 MVC + Eloquent sobre XAMPP Apache/MySQL, con `ccolcasdb` y `BCRYPT_ROUNDS=12`. |
 
 **Estrategia incremental** (4 incrementos): infra/entorno → persistencia+seguridad → catálogo/almacén → pedidos/ventas/auditoría.
-**Evaluación tripartita** (PA3): heurística Nielsen (10 principios) + pruebas funcionales (stock, precios por rol, descuento venta) + SUS (8-12 usuarios, umbral 68).
+**Evaluación tripartita**: heurística Nielsen (10 principios) + pruebas funcionales (stock, precios por rol, descuento venta) + SUS (8-12 usuarios, umbral 68).
 
 ---
 
@@ -64,7 +64,7 @@ resources/css/*             -> app.css, inicio.css, carrito.css, pedidos.css, ad
 resources/js/*              -> app.js, inicio.js, carrito.js, admin.js
 ```
 
-**Separación por área (PA3):** cada zona tiene su CSS/JS desacoplado vía Vite (`vite.config.js` 9 entradas: 5 CSS + 4 JS).
+**Separación por área:** cada zona tiene su CSS/JS desacoplado vía Vite (`vite.config.js` 9 entradas: 5 CSS + 4 JS).
 
 ---
 
@@ -133,7 +133,7 @@ tests/
 
 ---
 
-## 7. Flujo de pedido (PA3 § Flujo Comercial)
+## 7. Flujo de pedido
 
 ```
 Cliente: Catálogo -> Carrito (sesión) -> Checkout (auth)
@@ -159,7 +159,7 @@ Reglas clave: revalidación anti-trampa en `PedidoController@store` y `VentaCont
 
 ---
 
-## 8. Seguridad RBAC (PA3 § Módulo de Seguridad)
+## 8. Seguridad RBAC
 
 - **Auth**: `config/auth.php` usa `App\Models\Usuario` (tabla `usuarios`) + `BCRYPT_ROUNDS=12` (`.env`) + `casts ['password' => 'hashed']` + `Hash::make/check`.
 - **Middleware**: `bootstrap/app.php` alias `role => RoleMiddleware`. Grupo `prefix admin` exige `role:Administrador,Gerente,Subgerente,Contador,Almacenero,Vendedor`; subgrupo `admin/usuarios` exige `role:Administrador,Gerente`. Cliente → `403` en `/admin/*`.
@@ -168,7 +168,7 @@ Reglas clave: revalidación anti-trampa en `PedidoController@store` y `VentaCont
 
 ---
 
-## 9. Auditoría / Trazabilidad (PA3 § Auditoría — ISO 25010)
+## 9. Auditoría / Trazabilidad
 
 - **Observer pasivo**: `AuditObserver` (`created/updated/deleted`) registrado en `AppServiceProvider::boot()` sobre `Producto`, `Pedido`, `Venta` → `bitacora_cambios` (`usuario_id, tabla_afectada, accion, descripcion, datos_previos JSON, datos_nuevos JSON, fecha`).
 - **Historial de pedido**: `historial_pedido` para trazabilidad del flujo por estados (quién movió, de dónde a dónde, observación).
@@ -183,7 +183,7 @@ Reglas clave: revalidación anti-trampa en `PedidoController@store` y `VentaCont
 
 ---
 
-## 11. Calidad — ISO/IEC 25010 (PA3)
+## 11. Calidad — ISO/IEC 25010
 
 | Pilar | Cómo lo cumple CCOLCAS |
 |---|---|

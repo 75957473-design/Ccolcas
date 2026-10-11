@@ -43,7 +43,7 @@ class InventarioController extends Controller
     }
 
     /**
-     * PA3 - Proceso de Control: Transferencia multialmacén (Incremento 3).
+     * Transferencia multialmacén.
      * Descuenta del origen y suma al destino, con dos movimientos y transacción atómica.
      */
     public function transferir(Request $request)

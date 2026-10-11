@@ -92,7 +92,7 @@ Dos pestañas en la misma ventana:
 
 **¿Quién entra?** Cualquier rol **excepto Cliente**. Middleware `role:Administrador,Gerente,Subgerente,Contador,Almacenero,Vendedor` en `routes/web.php`. Cliente → `403`.
 
-- **Layout:** `layouts/admin.blade.php` · CSS `resources/css/admin.css` · JS `resources/js/admin.js` (separados por área, PA3).
+- **Layout:** `layouts/admin.blade.php` · CSS `resources/css/admin.css` · JS `resources/js/admin.js` (separados por área).
 - **Dashboard** (`/admin/dashboard`): saludo personalizado, stats rápidas y menú lateral: Principal / Catálogo (Productos, Categorías) / Operaciones (Inventario, Pedidos, Ventas) / Personas (Clientes, Usuarios).
 
 ### 7.1 Productos (`/admin/productos`)
@@ -106,14 +106,14 @@ Dos pestañas en la misma ventana:
 
 - CRUD + **toggle activo/inactivo**. Controlador: `Admin\CategoriaController`.
 
-### 7.3 Inventario (`/admin/inventario`) — Control de existencias PA3
+### 7.3 Inventario (`/admin/inventario`)
 
 - **Stock por almacén** con badges: OK / Crítico / Agotado.
 - **Historial:** últimos 20 `movimientos_inventario`.
 - **3 formularios:**
   1. **Registrar movimiento:** elige producto + almacén + tipo (ENTRADA/SALIDA) + cantidad + motivo → crea `movimientos_inventario` y actualiza `stock_por_almacen` con `lockForUpdate`.
   2. **Ajuste directo:** pones la **cantidad exacta** que debe haber (ej: tras conteo físico) → recalcula diferencia y genera movimiento.
-  3. **Transferencia entre almacenes** (nuevo PA3): elige **origen** y **destino** (distintos) + producto + cantidad → en **transacción atómica** resta en origen, suma en destino, crea 2 movimientos: *Salida por Transferencia* + *Entrada por Transferencia*. Valida stock suficiente en origen.
+  3. **Transferencia entre almacenes**: elige **origen** y **destino** (distintos) + producto + cantidad → en **transacción atómica** resta en origen, suma en destino, crea 2 movimientos: *Salida por Transferencia* + *Entrada por Transferencia*. Valida stock suficiente en origen.
 - Controlador: `Admin\InventarioController` (`movimiento`, `ajustar`, `transferir`).
 
 ### 7.4 Pedidos Admin (`/admin/pedidos`)
@@ -145,7 +145,7 @@ Dos pestañas en la misma ventana:
 
 ---
 
-## 8. Roles y permisos (PA3 RBAC)
+## 8. Roles y permisos
 
 | Rol | ¿Qué puede hacer en la web? |
 |---|---|

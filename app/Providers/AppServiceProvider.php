@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
-     * PA3 - Estrategia de Auditoría y Trazabilidad: Observer pasivo -> bitacora_cambios
+     * Auditoría y Trazabilidad: Observer pasivo -> bitacora_cambios
      */
     public function boot(): void
     {

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Observer genérico de auditoría pasiva (PA3: ISO 25010 - Trazabilidad).
+ * Observer genérico de auditoría pasiva.
  * Registra en bitacora_cambios: usuario, tabla, acción, fotos del estado previo/nuevo y timestamp.
  */
 class AuditObserver

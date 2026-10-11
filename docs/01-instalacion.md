@@ -68,8 +68,8 @@ DB_PASSWORD=
 SESSION_DRIVER=file
 ```
 
-- `DB_DATABASE=ccolcasdb` — nombre exigido por PA1/PA3 (no `ccolcas`).
-- `BCRYPT_ROUNDS=12` — fortaleza de hash (PA3 § Seguridad).
+- `DB_DATABASE=ccolcasdb` — nombre configurado para el proyecto (no `ccolcas`).
+- `BCRYPT_ROUNDS=12` — fortaleza de hash configurada en seguridad.
 - Tests no tocan `.env`: `phpunit.xml` fuerza `DB_CONNECTION=sqlite` + `DB_DATABASE=:memory:` y `BCRYPT_ROUNDS=4` para velocidad.
 
 ## 4. Verificación

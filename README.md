@@ -9,7 +9,7 @@ Solución web interactiva que centraliza lo que antes estaba en cuadernos, Excel
 
 ---
 
-## Producto (PA1 §3 / PA3)
+## Producto
 
 - **Inventario multialmacén:** stock por `stock_por_almacen`, ingresos/salidas, ajustes y **transferencias origen→destino** (2 movimientos atómicos).
 - **Precios:** `precio_venta = (costo_compra + costo_flete) * (1 + margen%)` — lo calcula el modelo y `admin.js` lo sugiere en vivo.
@@ -21,7 +21,7 @@ Solución web interactiva que centraliza lo que antes estaba en cuadernos, Excel
 
 ---
 
-## Metodología / Calidad / Estrategia (PA3)
+## Metodología / Calidad / Estrategia
 
 - **OOHDM:** Conceptual (19 tablas) → Navegacional (público vs admin por rol) → Interfaz Abstracta ADV (Blade + Tailwind, CSS/JS por área) → Implementación MVC Laravel 12 + XAMPP.
 - **Incremental:** 4 incrementos (infra → persistencia/seguridad → catálogo/almacén → pedidos/ventas/auditoría) desde 04/09/2026.
@@ -111,7 +111,7 @@ npm run build
 - `docs/02-arquitectura.md` — stack, OOHDM, MVC, rutas, flujo por rol, RBAC, auditoría, calidad
 - `docs/03-base-de-datos.md` — conexión, ER, 19 tablas, seeds, factories, relaciones
 - `docs/04-manual-usuario.md` — catálogo, carrito, login/registro, checkout, mis pedidos, panel admin por rol (en lenguaje sencillo)
-- `docs/IngWebEntregabes/` — PA1, PA3, ContenidoEntregableFinal y **EntregableFinal_Suble_Lima_Denilson_Rivaldo.docx**
+- `docs/IngWebEntregabes/` — ContenidoEntregableFinal y **EntregableFinal_Suble_Lima_Denilson_Rivaldo.docx**
 
 ---
 

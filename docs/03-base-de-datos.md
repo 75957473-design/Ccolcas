@@ -62,7 +62,7 @@ usuarios 1--* bitacora_cambios
 usuarios 1--* historial_pedido
 ```
 
-> El ER completo está en PA3 y en el Entregable Final (con captura fechada).
+> El ER completo se puede generar con `php artisan generate:erd` y se incluye en el Entregable Final (con captura fechada).
 > Si generas `docs/diagrama-er.png`, insértalo aquí: `![ER](diagrama-er.png)`
 
 ---
@@ -88,7 +88,7 @@ usuarios 1--* historial_pedido
 | 15 | **ventas** | `id, pedido_id FK unique, usuario_id FK, tipo_comprobante enum Boleta/Factura/Nota de Venta, numero_comprobante, metodo_pago enum Efectivo/Transferencia/YapePlin, monto_pagado, fecha_emision, timestamps` | 1 venta por pedido; descuenta stock |
 | 16 | **tipos_movimiento** | `id, nombre unique, tipo enum ENTRADA/SALIDA` | Catálogo de movimientos |
 | 17 | **movimientos_inventario** | `id, producto_id FK, almacen_id FK, tipo_movimiento_id FK, cantidad, motivo, usuario_id FK, fecha_movimiento` | Trazabilidad; transferencia genera 2 filas |
-| 18 | **historial_pedido** | `id, pedido_id FK cascade, estado_anterior_id FK nullable, estado_nuevo_id FK, usuario_id FK nullable, observacion text nullable, timestamps` | Stepper/timeline auditable (PA3 flujo por roles) |
+| 18 | **historial_pedido** | `id, pedido_id FK cascade, estado_anterior_id FK nullable, estado_nuevo_id FK, usuario_id FK nullable, observacion text nullable, timestamps` | Stepper/timeline auditable del flujo por roles |
 | 19 | **bitacora_cambios** | `id, usuario_id FK, tabla_afectada, accion enum INSERT/UPDATE/DELETE, descripcion, datos_previos json nullable, datos_nuevos json nullable, fecha` | Auditoría ISO 25010 vía `AuditObserver` |
 
 **Auxiliares Laravel** (no de dominio): `password_reset_tokens`, `sessions`, `cache`, `jobs`, `migrations`, `job_batches`, `failed_jobs`.

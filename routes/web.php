@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('categorias/{categoria}', [CategoriaController::class, 'destroy'])->name('categorias.destroy');
         Route::patch('categorias/{categoria}/toggle', [CategoriaController::class, 'toggle'])->name('categorias.toggle');
 
-        // Inventario — PA3 Control de existencias (ingresos/salidas/transferencias multialmacén)
+        // Inventario — Control de existencias (ingresos/salidas/transferencias multialmacén)
         Route::get('inventario', [InventarioController::class, 'index'])->name('inventario.index');
         Route::post('inventario/movimiento', [InventarioController::class, 'movimiento'])->name('inventario.movimiento');
         Route::post('inventario/ajustar', [InventarioController::class, 'ajustar'])->name('inventario.ajustar');
