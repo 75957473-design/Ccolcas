@@ -2,7 +2,8 @@
 
 > CCOLCAS — Sistema Web de Gestión de Inventario, Almacén y Ventas
 > Laravel 12 · MySQL `ccolcasdb` · Sede Cusco 2026
-> Repositorio: https://github.com/75957473-design/Colcas.git · Entregable Final: `docs/IngWebEntregabes/EntregableFinal_Suble_Lima_Denilson_Rivaldo.docx`
+> Repositorio: https://github.com/75957473-design/Ccolcas.git · Entregable Final: `docs/IngWebEntregabes/Suble_Lima_Denilson_Rivaldo_EntregableFinal_.docx`
+> Usuarios de prueba: ver §1.1 (7 cuentas por rol, pass `password`).
 
 Este manual te explica, en lenguaje sencillo, cómo usar CCOLCAS según quién eres. Cada persona ve solo lo que le toca por su rol.
 
@@ -17,6 +18,23 @@ Este manual te explica, en lenguaje sencillo, cómo usar CCOLCAS según quién e
 
 - Si ves `Vite manifest not found`, ejecuta `npm run build` y recarga.
 - Si ves `403` en `/admin/*`, es porque entraste como Cliente o sin login.
+
+### 1.1 Cuentas predefinidas para verificación
+
+Para que cualquier revisor pueda probar el proyecto sin crear usuarios a mano, al clonar y ejecutar `php artisan migrate --seed` (o `migrate:fresh --seed`) se crean **7 cuentas**, una por cada rol. Todas con contraseña **`password`** (hash Bcrypt rounds 12).
+
+| Email | Rol | Qué puede probar |
+|---|---|---|
+| `admin@ccolcas.com` | Administrador | Acceso total — Productos, Inventario, Pedidos, Ventas, Clientes, **Usuarios/Roles** |
+| `gerente@ccolcas.com` | Gerente | Como Admin + consultas gerenciales |
+| `subgerente@ccolcas.com` | Subgerente | Flujos de Pedidos + consulta |
+| `contador@ccolcas.com` | Contador | **Precios** (costo/flete/margen), Ventas, cerrar pedidos a Entregado |
+| `almacenero@ccolcas.com` | Almacenero | **Inventario** (movimientos, ajustes, **transferencias**), Pedidos En Almacén/Enviado |
+| `vendedor@ccolcas.com` | Vendedor | **Pedidos** Confirmar/Cancelar, Enviar, Entregar + Ventas + Clientes |
+| `cliente@ccolcas.com` | Cliente | **Catálogo → Carrito → Checkout → Mis Pedidos** (sin `/admin`, debe dar 403) |
+
+> Comando: `php artisan db:seed --class=UsuariosSeeder` (si ya migraste) o `php artisan migrate:fresh --seed` (desde cero).
+> Seeder: `database/seeders/UsuariosSeeder.php` llamado desde `DatabaseSeeder.php`. Usa `firstOrCreate` por email, no duplica si ya existen.
 
 ---
 
@@ -54,7 +72,7 @@ Dos pestañas en la misma ventana:
 | **Registrarse como Cliente** | Nombre, tipo/numero documento (DNI/RUC), teléfono, email, contraseña + confirmación | Crea `Usuario` (rol **Cliente**, password con `BCRYPT_ROUNDS=12`) + `Cliente` en **transacción**, te loguea automático y te lleva al catálogo. |
 
 - Contraseña con hash seguro (`Usuario casts ['password'=>'hashed']`).
-- Sin usuarios por defecto — el primer admin se crea por seeder o por `/admin/usuarios`.
+- Hay 7 usuarios de prueba (ver §1.1) — si prefieres, crea otros desde `/admin/usuarios` como Admin/Gerente.
 
 ---
 
